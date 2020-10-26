@@ -34,14 +34,14 @@ LABEL org.label-schema.name="ombi" \
 COPY --from=builder /output/ /
 
 WORKDIR /ombi
-#RUN apk add --no-cache libstdc++ libgcc libintl icu-libs
+RUN apk add --no-cache libstdc++ libgcc libintl icu-libs
 
 VOLUME ["/config"]
 
 EXPOSE 5000/TCP
 
 HEALTHCHECK --start-period=10s --timeout=5s \
-    CMD wget -qO /dev/null "http://localhost:5000/swagger"
+    CMD wget -qO /dev/null "http://localhost:5000/api/v1/Status"
 
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/entrypoint.sh"]
 CMD ["/ombi/Ombi", "--storage", "/config"]
