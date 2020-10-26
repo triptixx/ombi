@@ -1,0 +1,31 @@
+name: docker build
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  ombi:
+    runs-on: ubuntu-latest
+    steps:
+      - name: clone
+        uses: actions/checkout@master
+      - name: build
+        uses: triptixx/action-docker-build@master
+        with:
+          repo: ombi-dev
+      - name: test
+        uses: triptixx/action-docker-test@master
+        with:
+          verbose: true
+          repo: ombi-dev
+          curl: :5000
+          curl_opts: -c /dev/null
+      - name: publish
+        uses: triptixx/action-docker-publish@master
+        with:
+          docker_username: ${{ secrets.docker_username }}
+          docker_password: ${{ secrets.docker_password }}
+          from: ombi-dev
+          repo: ${{ secrets.docker_username }}/ombi
+          tags: latest,%label org.label-schema.version | %auto
