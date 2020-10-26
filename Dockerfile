@@ -13,7 +13,7 @@ RUN apk add --no-cache git binutils file; \
     git clone https://github.com/tidusjar/Ombi.git --branch feature/v4 --depth 1 .; \
     dotnet publish -p:Version=4.0.533 -p:PublishTrimmed=true -c Release -f netcoreapp${DOTNET_TAG} \
         -r linux-musl-x64 -o /output/ombi src/Ombi; \
-    find /output/ombi-exec sh -c 'file "{}" | grep -q ELF && strip --strip-debug "{}"' \;
+    find /output/ombi -exec sh -c 'file "{}" | grep -q ELF && strip --strip-debug "{}"' \;
 
 COPY *.sh /output/usr/local/bin/
 RUN chmod -R u=rwX,go=rX /output/ombi; \
