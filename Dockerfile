@@ -27,7 +27,7 @@ ARG OMBI_VER
 ENV SUID=952 SGID=952
 
 LABEL org.label-schema.name="ombi" \
-      org.label-schema.description="A docker image for Ombi" \
+      org.label-schema.description="A Docker image for the reauest content software Ombi" \
       org.label-schema.url="https://github.com/tidusjar/Ombi" \
       org.label-schema.version=${OMBI_VER}
 
