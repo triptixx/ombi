@@ -10,7 +10,7 @@ ARG NG_CLI_ANALYTICS=ci
 
 ### install ombi
 WORKDIR /ombi-src
-RUN apk add --no-cache git binutils file; \
+RUN apk add --no-cache git binutils file yarn; \
     git clone https://github.com/tidusjar/Ombi.git --branch feature/v4 --depth 1 .; \
     yarn --cwd src/Ombi/ClientApp install; \
     yarn --cwd src/Ombi/ClientApp run build; \
