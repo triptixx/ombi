@@ -1,18 +1,23 @@
 ARG ALPINE_TAG=3.12
 ARG DOTNET_TAG=3.1
-ARG OMBI_VER=4.0.533
+ARG OMBI_VER=4.0.550
 
 FROM mcr.microsoft.com/dotnet/core/sdk:${DOTNET_TAG}-alpine AS builder
 
 ARG OMBI_VER
 ARG DOTNET_TAG
+ARG NG_CLI_ANALYTICS=ci
 
 ### install ombi
 WORKDIR /ombi-src
 RUN apk add --no-cache git binutils file; \
     git clone https://github.com/tidusjar/Ombi.git --branch feature/v4 --depth 1 .; \
-    dotnet publish -p:Version=4.0.533 -p:PublishTrimmed=true -c Release -f netcoreapp${DOTNET_TAG} \
+    yarn --cwd src/Ombi/ClientApp install; \
+    yarn --cwd src/Ombi/ClientApp run build; \
+    dotnet publish -p:SemVer=${OMBI_VER} -p:FullVer=${OMBI_VER} -p:PublishTrimmed=true -c Release -f netcoreapp${DOTNET_TAG} \
         -r linux-musl-x64 -o /output/ombi src/Ombi; \
+    mkdir -p /output/ombi/ClientApp; \
+    cp -a src/Ombi/ClientApp/dist /output/ombi/ClientApp/; \
     find /output/ombi -exec sh -c 'file "{}" | grep -q ELF && strip --strip-debug "{}"' \;
 
 COPY *.sh /output/usr/local/bin/
