@@ -1,8 +1,8 @@
 ARG ALPINE_TAG=3.12
-ARG DOTNET_TAG=3.1
-ARG OMBI_VER=4.0.550
+ARG DOTNET_TAG=5.0
+ARG OMBI_VER=4.0.975
 
-FROM mcr.microsoft.com/dotnet/core/sdk:${DOTNET_TAG}-alpine AS builder
+FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_TAG}-alpine AS builder
 
 ARG OMBI_VER
 ARG DOTNET_TAG
@@ -14,7 +14,7 @@ RUN apk add --no-cache git binutils file yarn; \
     git clone https://github.com/tidusjar/Ombi.git --branch feature/v4 --depth 1 .; \
     yarn --cwd src/Ombi/ClientApp install; \
     yarn --cwd src/Ombi/ClientApp run build; \
-    dotnet publish -p:SemVer=${OMBI_VER} -p:FullVer=${OMBI_VER} -p:PublishTrimmed=true -c Release -f netcoreapp${DOTNET_TAG} \
+    dotnet publish -p:SemVer=${OMBI_VER} -p:FullVer=${OMBI_VER} -p:PublishTrimmed=true -c Release -f net${DOTNET_TAG} \
         -r linux-musl-x64 -o /output/ombi src/Ombi; \
     mkdir -p /output/ombi/ClientApp; \
     cp -a src/Ombi/ClientApp/dist /output/ombi/ClientApp/; \
