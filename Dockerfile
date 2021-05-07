@@ -1,6 +1,6 @@
 ARG ALPINE_TAG=3.13
 ARG DOTNET_TAG=5.0
-ARG OMBI_VER=4.0.1153
+ARG OMBI_VER=4.0.1342
 
 FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_TAG}-alpine AS builder
 
